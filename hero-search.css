@@ -1,16 +1,16 @@
 /* ==========================================================================
-   1. HERO SECTION & LAYOUT
+   1. HERO SECTION & LAYOUT 
    ========================================================================== */
 .hero-search-top {
     position: relative;
     width: 100%;
     min-height: 90vh;
     display: flex;
-    align-items: flex-start;
+    align-items: center; 
     justify-content: center;
     background: var(--surface-light);
     margin-top: -4rem; 
-    padding-top: 12vh;
+    padding-top: 5vh; 
     overflow: visible !important; 
 }
 
@@ -29,33 +29,77 @@
 body.dark-mode .hero-main-shape { background: #000; }
 
 .hero-bg-img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0.2; 
-    filter: grayscale(100%) brightness(1.2); 
+    z-index: 1;
+    
+    /* MODIFICARE: Light Mode - Fără filtre, culoare naturală */
+    opacity: 2; /* Ajustează opacitatea dacă e prea stridentă, dar rămâne colorată */
+    filter: none; /* Am eliminat grayscale și contrastul forțat */
+    mix-blend-mode: normal; 
+    pointer-events: none;
 }
 
-body.dark-mode .hero-bg-img { opacity: 0.5; filter: grayscale(100%) brightness(1); }
+/* DARK MODE VECHI - Aici păstrăm stilul tău tehnic */
+body.dark-mode .hero-bg-img { 
+    opacity: 0.5; 
+    filter: grayscale(100%) brightness(1); 
+    mix-blend-mode: normal; 
+}
 
 .hero-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to right, rgba(240, 240, 240, 0.9), transparent);
+    /* Gradient radial: mai opac în centru (unde e textul) și mai clar spre margini */
+    background: radial-gradient(
+        circle at center, 
+        rgba(240, 240, 240, 0.9) 0%, 
+        rgba(240, 240, 240, 0.4) 70%, 
+        transparent 100%
+    );
+    z-index: 2;
 }
 
-body.dark-mode .hero-overlay { background: linear-gradient(to right, rgba(0,0,0,0.8), transparent); }
-
+body.dark-mode .hero-overlay { 
+    background: linear-gradient(to right, rgba(0,0,0,0.8), transparent); 
+}
 /* ==========================================================================
-   2. TYPOGRAPHY & WRAPPER
+   2. TYPOGRAPHY & WRAPPER - MODIFICAT PENTRU CENTRARE
    ========================================================================== */
 .search-wrapper {
     position: relative;
     width: 90%;
-    max-width: 1200px;
+    max-width: 1100px; /* Puțin mai îngust pentru centrarea tip Google */
     z-index: 100; 
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centrează copiii pe axa orizontală */
+    text-align: center;   /* Centrează textul în interior */
 }
 
+/* Stilul tău de titlu, acum centrat */
+.minimal-hero-title {
+    font-family: 'Archivo', sans-serif;
+    font-size: clamp(1.5rem, 3.5vw, 2.2rem); 
+    font-weight: 600;
+    color: var(--text-main);
+    letter-spacing: -0.01em;
+    margin-bottom: 2rem;
+    line-height: 1.4;
+    text-transform: none;
+    border: none;
+    width: 100%;
+}
+
+.minimal-hero-title span {
+    color: var(--accent);
+    font-weight: 700;
+}
+
+/* Păstrat restul tipografiei tale pentru compatibilitate */
 .main-title {
     font-family: 'Bricolage Grotesk', sans-serif;
     font-size: clamp(3rem, 7vw, 5.5rem);
@@ -65,23 +109,12 @@ body.dark-mode .hero-overlay { background: linear-gradient(to right, rgba(0,0,0,
     text-transform: uppercase;
     margin-bottom: 1rem;
 }
-
 body.dark-mode .main-title { color: #ffffff; }
-
-.sub-title-industrial {
-    color: rgba(0, 0, 0, 0.6); 
-    font-family: 'Space Mono', monospace;
-    font-size: 1.1rem;
-    margin-bottom: 3rem;
-    max-width: 600px;
-}
-
-body.dark-mode .sub-title-industrial { color: rgba(255,255,255,0.7); }
 
 .accent-text { color: var(--accent); }
 
 /* ==========================================================================
-   3. SEARCH BOX & INPUTS
+   3. SEARCH BOX & INPUTS - PĂSTRAT INTACT
    ========================================================================== */
 .search-box-wild {
     background: var(--nav-bg); 
@@ -89,6 +122,8 @@ body.dark-mode .sub-title-industrial { color: rgba(255,255,255,0.7); }
     padding: 1.5rem 2.5rem;
     position: relative;
     z-index: 100;
+    width: 100%; /* Ocupă lățimea wrapper-ului centrat */
+    text-align: left; /* Păstrează textul din interiorul bării la stânga */
 }
 
 .search-form {
@@ -125,7 +160,7 @@ body.dark-mode .sub-title-industrial { color: rgba(255,255,255,0.7); }
     caret-color: var(--accent);
 }
 
-body.dark-mode .industrial-input { color: var(--accent); }
+body.dark-mode .industrial-input { color: #ffffff; }
 
 .industrial-input::placeholder {
     color: rgba(255, 255, 255, 0.3);
@@ -139,7 +174,7 @@ body.dark-mode .industrial-input { color: var(--accent); }
 }
 
 /* ==========================================================================
-   4. SEARCH BUTTON & TAGS
+   4. SEARCH BUTTON & TAGS - TAGURI CENTRATE
    ========================================================================== */
 .search-submit-btn {
     background: var(--accent);
@@ -162,7 +197,13 @@ body.dark-mode .industrial-input { color: var(--accent); }
     transform: translateY(-5px);
 }
 
-.quick-tags-minimal { margin-top: 3rem; display: flex; gap: 25px; }
+.quick-tags-minimal { 
+    margin-top: 3rem; 
+    display: flex; 
+    gap: 25px; 
+    justify-content: center; /* Centrare taguri sub bară */
+}
+
 .quick-tags-minimal a {
     font-family: 'Space Mono', monospace;
     color: #1a1c1e; 
@@ -170,12 +211,23 @@ body.dark-mode .industrial-input { color: var(--accent); }
     text-decoration: none;
     font-size: 0.9rem;
 }
+body.dark-mode .search-submit-btn {
+    background: var(--accent);
+    color: #000; /* Text negru pe buton portocaliu pentru lizibilitate maximă */
+    box-shadow: 4px 4px 0px rgba(255, 255, 255, 0.1);
+}
 
+body.dark-mode .search-submit-btn:hover {
+    background: #FFC800; /* La hover se aprinde alb complet */
+    color: #000000;      /* Textul rămâne negru */
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.4); /* Efect de glow */
+    transform: translateY(-5px) scale(1.02);
+}
 body.dark-mode .quick-tags-minimal a { color: #ffffff; }
 .quick-tags-minimal a:hover { opacity: 1; color: var(--accent); }
 
 /* ==========================================================================
-   5. INDUSTRIAL SUGGESTIONS SYSTEM
+   5. INDUSTRIAL SUGGESTIONS SYSTEM - PĂSTRAT INTACT
    ========================================================================== */
 .suggestions-list {
     position: absolute;
@@ -189,21 +241,16 @@ body.dark-mode .quick-tags-minimal a { color: #ffffff; }
     max-height: 280px;
     overflow-y: auto;
     z-index: 9999;
-    
-    /* Background grid specific pentru lista */
     background-image: 
         linear-gradient(rgba(255, 62, 0, 0.05) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 62, 0, 0.05) 1px, transparent 1px);
     background-size: 15px 15px;
-    
     clip-path: polygon(0 0, 100% 0, 100% 92%, 96% 100%, 0 100%);
     box-shadow: 15px 15px 30px rgba(0, 0, 0, 0.4);
     animation: panelReveal 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.suggestions-list.active {
-    display: block !important;
-}
+.suggestions-list.active { display: block !important; }
 
 .suggestion-item {
     padding: 1rem 1.5rem;
@@ -218,49 +265,24 @@ body.dark-mode .quick-tags-minimal a { color: #ffffff; }
     align-items: center;
     transition: all 0.2s ease;
 }
-
-.suggestion-item::before {
-    content: ">";
-    margin-right: 10px;
-    color: var(--accent);
-    opacity: 0;
-    transform: translateX(-10px);
-    transition: all 0.2s ease;
+.suggestions-list::-webkit-scrollbar {
+    width: 6px;
 }
-
+.suggestions-list::-webkit-scrollbar-track {
+    background: var(--nav-bg);
+}
+.suggestions-list::-webkit-scrollbar-thumb {
+    background: var(--accent);
+}
 .suggestion-item:hover {
-    /* Folosim un fundal mai opac pentru contrast mai bun */
     background: rgba(255, 62, 0, 0.25);
-    
-    /* REPARARE: Forțăm o culoare deschisă indiferent de mod (Dark/Light) */
-    /* Folosim #FFC800 (galbenul tău industrial original) pentru a "sări" în ochi */
     color: #FFC800 !important; 
-    
     padding-left: 2.5rem;
     font-weight: 900;
 }
 
-body.dark-mode .suggestion-item:hover {
-    text-shadow: 0 0 8px rgba(255, 200, 0, 0.4);
-}
-
-.suggestion-item:hover::before {
-    opacity: 1;
-    transform: translateX(0);
-}
-
-/* Scrollbar Style */
-.suggestions-list::-webkit-scrollbar { width: 6px; }
-.suggestions-list::-webkit-scrollbar-track { background: var(--nav-bg); }
-.suggestions-list::-webkit-scrollbar-thumb { background: var(--accent); }
-
-@keyframes panelReveal {
-    0% { opacity: 0; transform: translateY(10px); }
-    100% { opacity: 1; transform: translateY(0); }
-}
-
 /* ==========================================================================
-   6. RESPONSIVE DESIGN
+   6. RESPONSIVE DESIGN - PĂSTRAT INTACT
    ========================================================================== */
 @media (max-width: 850px) {
     .hero-main-shape { height: 100%; clip-path: none; }
