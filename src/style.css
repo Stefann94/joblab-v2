@@ -1,0 +1,229 @@
+/* SECTION: VARIABLES */
+:root {
+    --accent: #FF3E00; 
+    --shadow-color: rgba(0, 0, 0, 0.15);
+    
+    /* THE GOLDEN INDUSTRIAL PALETTE (LIGHT MODE) */
+    --surface-light: #FFC800;      /* Galben Industrial Principal */
+    --surface-elevated: #FFE066;   /* Galben mai deschis pentru grid/carduri */
+    --nav-bg: #0F172A;             /* Navy profund pentru contrast */
+    --text-main: #0F172A;          /* Text principal navy */
+    --text-muted: #475569;
+    --grid-color: rgba(15, 23, 42, 0.08);
+    --nav-button-bg: rgba(233, 240, 246, 0.15);
+}
+
+body.dark-mode {
+    --surface-light: #0B0E14;
+    --surface-elevated: #161B22;
+    --nav-bg: #0B0E14;
+    --text-main: #F3F4F6;
+    --text-muted: #9CA3AF;
+    --shadow-color: rgba(0, 0, 0, 0.4);
+    --grid-color: rgba(255, 255, 255, 0.03);
+    --nav-button-bg: #2D3135;
+}
+
+/* SECTION: GLOBAL STYLES */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Space Mono', monospace;
+    background-color: var(--surface-light); 
+    color: var(--text-main);
+    /* Grid industrial de fundal */
+    background-image: 
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+    background-size: 40px 40px;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* SECTION: HEADER & NAVIGATION */
+.main-header {
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--nav-bg);
+    /* Design asimetric */
+    clip-path: polygon(0 0, 100% 0, 100% 82%, 0 100%);
+    padding-bottom: 0.5rem; 
+    box-shadow: 0 10px 30px var(--shadow-color);
+}
+
+.nav-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 4%;
+}
+
+.brand-id {
+    font-weight: 800;
+    font-size: 1.5rem;
+    font-family: 'Bricolage Grotesk', sans-serif;
+    color: var(--accent);
+    letter-spacing: -1px;
+    padding: 10px 0;
+    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.nav-links {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.nav-links li {
+    list-style: none;
+    position: relative;
+}
+
+.nav-item {
+    display: block;
+    padding: 0.6rem 1.5rem; /* Redus de la 1rem 2rem */
+    text-decoration: none;
+    color: #FFFFFF;
+    font-size: 0.85rem; /* Scăzut ușor fontul pentru echilibru */
+    font-weight: 900;
+    text-transform: uppercase;
+    background: var(--nav-button-bg);
+    clip-path: polygon(12% 0%, 100% 0%, 88% 100%, 0% 100%);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 1px;
+}
+
+body.dark-mode .nav-item {
+    color: #E2E2E2;
+}
+
+.nav-item:hover {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    background: var(--accent) !important;
+    color: #ffffff !important;
+    transform: translateY(-3px);
+    z-index: 2;
+    box-shadow: 0 6px 15px -5px var(--accent);
+}
+
+.nav-item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+}
+
+.nav-item:hover::after {
+    left: 150%;
+    transition: all 0.6s ease-in-out;
+}
+
+/* SECTION: UTILITIES - Modificat cu stilul Hexagon */
+.mode-switch {
+    background: var(--accent);
+    border: none;
+    color: white;
+    cursor: pointer;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    transition: transform 0.2s ease, box-shadow 0.1s;
+    box-shadow: 4px 4px 0px var(--shadow-color);
+}
+
+.mode-switch:hover {
+    transform: rotate(15deg) scale(1.1);
+}
+
+.mode-switch:active {
+    transform: translate(2px, 2px);
+}
+
+.mode-switch svg {
+    width: 20px;
+    stroke-width: 2;
+    fill: currentColor;
+}
+
+/* SECTION: FOOTER */
+.main-footer {
+    margin-top: 5rem;
+    padding: 6rem 4% 3rem 4%;
+    background: var(--nav-bg); /* Navy pentru contrast pe light mode */
+    color: #FFFFFF;
+    clip-path: polygon(0 12%, 100% 0, 100% 100%, 0 100%);
+}
+
+body.dark-mode .main-footer {
+    background: var(--surface-elevated);
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 4rem;
+}
+
+.footer-section h4 {
+    font-family: 'Bricolage Grotesk', sans-serif;
+    color: var(--surface-light); /* Galbenul sare în ochi pe navy */
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+
+.footer-section a {
+    display: block;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.footer-section a:hover {
+    color: var(--accent);
+    padding-left: 5px;
+}
+
+.status-tag {
+    background: #00FF41;
+    color: #000;
+    padding: 5px 15px;
+    font-size: 0.7rem;
+    font-weight: 900;
+    display: inline-block;
+    box-shadow: 5px 5px 0px rgba(0, 255, 65, 0.2);
+}
+
+.footer-bottom {
+    margin-top: 5rem;
+    padding-top: 2rem;
+    font-size: 0.7rem;
+    display: flex;
+    justify-content: space-between;
+    opacity: 0.5;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* SECTION: RESPONSIVE OPTIMIZATION */
+@media (max-width: 60rem) {
+    .nav-links { display: none; }
+    .main-header { clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%); padding-bottom: 2rem; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .main-footer { clip-path: polygon(0 5%, 100% 0, 100% 100%, 0 100%); padding-top: 4rem; }
+}
+
+@media (max-width: 30rem) {
+    .brand-id { font-size: 1.2rem; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+}
