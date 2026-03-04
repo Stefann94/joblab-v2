@@ -1,77 +1,56 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const categorii = [
-        {
-            main: "ENGINEERING",
-            sub: "MESERII TEHNICE",
-            img: "https://images.unsplash.com/photo-1581092120530-66a8e351843b?q=80&w=800",
-            count: 124
-        },
-        {
-            main: "PRODUCTION",
-            sub: "INDUSTRIE GREA",
-            img: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=800",
-            count: 89
-        },
-        {
-            main: "CYBER_CORE",
-            sub: "TECH & SOFTWARE",
-            img: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800",
-            count: 56
-        },
-        {
-            main: "LOGISTICS",
-            sub: "SUPPLY CHAIN",
-            img: "https://images.unsplash.com/photo-1580674271108-033faff74831?q=80&w=800",
-            count: 72
-        },
-        {
-            main: "CHEF_LAB",
-            sub: "GASTRONOMIE",
-            img: "https://images.unsplash.com/photo-1577106263724-2c8e03bfe9cf?q=80&w=800",
-            count: 45
-        },
-        {
-            main: "STRUCTURE",
-            sub: "CONSTRUCȚII",
-            img: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=800",
-            count: 93
+document.addEventListener("DOMContentLoaded", async () => {
+    const domainsContainer = document.getElementById("domains-container");
+
+    // 1. Funcția care descarcă datele din Supabase
+    async function fetchCategorii() {
+        try {
+            const { data, error } = await db
+                .from('categorii')
+                .select('*')
+                .order('count', { ascending: false }); // Le punem pe cele mai populare primele
+
+            if (error) throw error;
+
+            if (data) {
+                renderCategorii(data);
+            }
+        } catch (error) {
+            console.error("Eroare la încărcarea categoriilor:", error.message);
+            domainsContainer.innerHTML = "<p>Nu am putut încărca domeniile momentan.</p>";
         }
-    ];
+    }
 
-    const container = document.getElementById('domains-container');
+    // 2. Funcția care generează HTML-ul pentru fiecare card
+    function renderCategorii(categorii) {
+        // Curățăm containerul (ștergem cardurile demo din HTML)
+        domainsContainer.innerHTML = "";
 
-    if (container) {
-        container.innerHTML = ""; 
+        categorii.forEach(cat => {
+            const card = document.createElement("div");
+            card.classList.add("domain-card");
 
-        categorii.forEach((cat, index) => {
-            const card = document.createElement('div');
-            card.className = 'domain-card';
-            // Adăugăm un mic delay pentru fiecare card ca să apară pe rând
-            card.style.opacity = "0";
-            card.style.transform = "translateY(30px)";
-            
             card.innerHTML = `
                 <div class="domain-shape">
-                    <img src="${cat.img}" alt="${cat.main}">
+                    <img src="${cat.img}" alt="${cat.sub}">
                     <div class="domain-overlay"></div>
-                    <h3 class="domain-title">
-                        ${cat.main}
-                        <span class="accent-text">${cat.sub}</span>
-                    </h3>
+                    <h3 class="domain-title">${cat.sub}</h3>
                 </div>
                 <div class="domain-footer">
-                    <span>${cat.count} UNITS_AVAILABLE</span>
+                    <span>${cat.count} Joburi active</span>
+                    <div class="arrow-icon">→</div>
                 </div>
             `;
 
-            container.appendChild(card);
+            // Opțional: Adăugăm un eveniment de click pentru filtrare viitoare
+            card.addEventListener('click', () => {
+                console.log(`Ai ales categoria: ${cat.main}`);
+                // Aici vei pune logica de redirecționare către pagina de rezultate
+            });
 
-            // Trigger animație de intrare
-            setTimeout(() => {
-                card.style.transition = "all 0.6s cubic-bezier(0.23, 1, 0.32, 1)";
-                card.style.opacity = "1";
-                card.style.transform = "translateY(0)";
-            }, 100 * index);
+            domainsContainer.appendChild(card);
         });
     }
+
+    // Pornim procesul
+    fetchCategorii();
 });

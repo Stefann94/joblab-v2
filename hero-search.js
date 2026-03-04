@@ -1,92 +1,75 @@
 document.addEventListener("DOMContentLoaded", () => {
-    /* --- LISTĂ DOMENII (TOT SPECTRUL) --- */
-    const domenii = [
-        "Bucătar / Ajutor bucătar", "Chelner / Ospătar", "Barman", "Cofetar / Patiser",
-        "Curățenie / Housekeeping", "Pază și Protecție", "Curier / Livrator",
-        "Șofer (B / C / E)", "Șofer Transport Persoane", "Mecanic Auto", 
-        "Tinichigiu / Vopsitor", "Operator Logistică", "Stivuitorist", "Gestionar",
-        "Software Developer (Java/JS/C#)", "Frontend / Backend Developer", 
-        "IT Support / Helpdesk", "Graphic Designer", "Social Media Manager",
-        "Data Analyst", "Tester (QA)", "Cybersecurity",
-        "Zidar / Zugrav", "Instalator", "Electrician Construcții", 
-        "Dulgher / Fierar", "Montator Geamuri/Termopan", "Lacatuș",
-        "Inginerie Mecanică", "Inginerie Electrică", "Inginerie Automatizări",
-        "Management Producție", "Quality Control", "Sudură Industrială",
-        "Tehnician Mentenanță", "Operator CNC", "Electromecanică",
-        "Vânzător / Lucrător Comercial", "Casier", "Agent Vânzări", 
-        "Call Center / Suport Clienți", "Secretariat / Administrativ",
-        "Contabilitate / Finanțe", "Resurse Umane (HR)", "Marketing & PR",
-        "Asistent Medical", "Medic", "Farmacist", "Îngrijitor bătrâni",
-        "Profesor / Educator", "Trainer / Formator"
-    ];
+    let debounceTimer;
 
-    /* --- LISTĂ JUDEȚE ȘI ORAȘE PRINCIPALE --- */
-    const localitati = [
-        // JUDEȚE
-        "Alba", "Arad", "Argeș", "Bacău", "Bihor", "Bistrița-Năsăud", "Botoșani", "Brăila", "Brașov", "Buzău", 
-        "Călărași", "Caraș-Severin", "Cluj", "Constanța", "Covasna", "Dâmbovița", "Dolj", "Galați", "Giurgiu", 
-        "Gorj", "Harghita", "Hunedoara", "Ialomița", "Iași", "Ilfov", "Maramureș", "Mehedinți", "Mureș", "Neamț", 
-        "Olt", "Prahova", "Sălaj", "Satu Mare", "Sibiu", "Suceava", "Teleorman", "Timiș", "Tulcea", "Vâlcea", 
-        "Vaslui", "Vrancea", "București",
+    // Cache pentru date ca să nu apelăm DB la fiecare literă după ce le avem deja
+    const cache = {
+        categorii: null,
+        localitati: null
+    };
 
-        // ORAȘE PRINCIPALE (REȘEDINȚE)
-        "Alba Iulia", "Arad", "Pitești", "Bacău", "Oradea", "Bistrița", "Botoșani", "Brăila", "Brașov", "Buzău", 
-        "Călărași", "Reșița", "Cluj-Napoca", "Constanța", "Sfântu Gheorghe", "Târgoviște", "Craiova", "Galați", 
-        "Giurgiu", "Târgu Jiu", "Miercurea Ciuc", "Deva", "Slobozia", "Iași", "Baia Mare", "Drobeta-Turnu Severin", 
-        "Târgu Mureș", "Piatra Neamț", "Slatina", "Ploiești", "Zalău", "Satu Mare", "Sibiu", "Suceava", "Alexandria", 
-        "Timișoara", "Tulcea", "Râmnicu Vâlcea", "Vaslui", "Focșani"
-    ];
-
-    /* --- LOGICĂ NORMALIZARE DIACRITICE --- */
-    function normalizeString(str) {
-        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    function removeDiacritics(str) {
+        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
 
-    function setupSuggestions(inputId, listId, data) {
+    // --- FUNCȚIE CARE IA TOATE DATELE O SINGURĂ DATĂ SAU DIN CACHE ---
+    async function getAllData(tableName, columnName) {
+        if (cache[tableName]) return cache[tableName];
+
+        try {
+            const { data, error } = await db.from(tableName).select(columnName);
+            if (error) throw error;
+            
+            cache[tableName] = data.map(item => item[columnName]);
+            return cache[tableName];
+        } catch (err) {
+            console.error(`Eroare la încărcarea tabelului ${tableName}:`, err);
+            return [];
+        }
+    }
+
+    // --- FUNCȚIE CĂUTARE INTELIGENTĂ (CLIENT-SIDE) ---
+    async function searchSmart(tableName, columnName, query) {
+        const allItems = await getAllData(tableName, columnName);
+        const cleanQuery = removeDiacritics(query.toLowerCase());
+
+        const startsWith = [];
+        const contains = [];
+
+        allItems.forEach(item => {
+            const cleanItem = removeDiacritics(item.toLowerCase());
+            
+            if (cleanItem.startsWith(cleanQuery)) {
+                startsWith.push(item);
+            } else if (cleanItem.includes(cleanQuery)) {
+                contains.push(item);
+            }
+        });
+
+        startsWith.sort((a, b) => a.localeCompare(b, 'ro'));
+        contains.sort((a, b) => a.localeCompare(b, 'ro'));
+
+        return [...startsWith, ...contains].slice(0, 8);
+    }
+
+    function setupSearch(inputId, listId, tableName, columnName) {
         const input = document.getElementById(inputId);
         const list = document.getElementById(listId);
 
         if (!input || !list) return;
 
         input.addEventListener("input", () => {
-            const rawVal = input.value;
-            const searchVal = normalizeString(rawVal);
-            list.innerHTML = "";
+            clearTimeout(debounceTimer);
+            const val = input.value.trim();
 
-            if (searchVal.length < 2) {
+            if (val.length < 2) {
                 list.classList.remove("active");
                 return;
             }
 
-            // Filtrare: eliminăm duplicatele (județ vs oraș cu același nume) și sortăm
-            const filtered = [...new Set(data)]
-                .filter(item => normalizeString(item).includes(searchVal))
-                .sort((a, b) => a.localeCompare(b, 'ro'))
-                .slice(0, 8); // Limităm la 8 rezultate pentru aspect compact
-
-            if (filtered.length === 0) {
-                list.classList.remove("active");
-                return;
-            }
-
-            filtered.forEach(item => {
-                const div = document.createElement("div");
-                div.classList.add("suggestion-item");
-                div.textContent = item;
-
-                div.addEventListener("mousedown", (e) => {
-                    input.value = item;
-                    list.classList.remove("active");
-                });
-
-                list.appendChild(div);
-            });
-
-            list.classList.add("active");
-        });
-
-        input.addEventListener("focus", () => {
-            if (input.value.length >= 2) list.classList.add("active");
+            debounceTimer = setTimeout(async () => {
+                const results = await searchSmart(tableName, columnName, val);
+                renderResults(results, input, list);
+            }, 100); // Mult mai rapid pentru că datele sunt deja în memorie
         });
 
         input.addEventListener("blur", () => {
@@ -94,7 +77,26 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    /* --- INIȚIALIZARE --- */
-    setupSuggestions("input-domeniu", "suggestions-domeniu", domenii);
-    setupSuggestions("input-localitate", "suggestions-localitate", localitati);
+    function renderResults(results, input, list) {
+        list.innerHTML = "";
+        if (results.length > 0) {
+            [...new Set(results)].forEach(text => {
+                const div = document.createElement("div");
+                div.classList.add("suggestion-item");
+                div.textContent = text;
+                div.addEventListener("mousedown", (e) => {
+                    e.preventDefault();
+                    input.value = text;
+                    list.classList.remove("active");
+                });
+                list.appendChild(div);
+            });
+            list.classList.add("active");
+        } else {
+            list.classList.remove("active");
+        }
+    }
+
+    setupSearch("input-domeniu", "suggestions-domeniu", "categorii", "sub");
+    setupSearch("input-localitate", "suggestions-localitate", "localitati", "nume");
 });

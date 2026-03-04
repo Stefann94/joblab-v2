@@ -60,12 +60,16 @@ const UI = {
 
 const app = {
     init: () => {
+        // Schimbăm 'dark' cu 'light' ca valoare default
         const currentTheme = localStorage.getItem('sys-theme') || 'light';
         const navRoot = document.getElementById('navbar-placeholder');
         const footRoot = document.getElementById('footer-placeholder');
         
+        // Dacă tema este dark, aplicăm clasa, dacă e light, ne asigurăm că e scoasă
         if (currentTheme === 'dark') {
             document.body.classList.add('dark-mode');
+        } else {
+            document.body.classList.remove('dark-mode');
         }
         
         if (navRoot) navRoot.innerHTML = UI.navbar(currentTheme);
@@ -79,6 +83,8 @@ const app = {
         
         const btn = document.getElementById('theme-icon-container');
         if (btn) {
+            // Dacă e acum Dark, arătăm Soarele (pentru a trece la Light)
+            // Dacă e acum Light, arătăm Luna (pentru a trece la Dark)
             btn.innerHTML = isDark ? UI.icons.sun : UI.icons.moon;
         }
     }

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Job-Lab | Industrial Search</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="hero-search.css">
@@ -12,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesk:wght@800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
-<body class="dark-mode">
+<body>
 
     <div id="navbar-placeholder"></div>
 
@@ -24,11 +25,11 @@
             </div>
 
             <div class="search-wrapper">
-<div class="search-header-top">
-        <h1 class="minimal-hero-title">
-            GĂSEȘTE <span class="accent-text">PROIECTUL</span> CARE TE DEFINEȘTE
-        </h1>
-    </div>
+                <div class="search-header-top">
+                    <h1 class="minimal-hero-title">
+                        GĂSEȘTE <span class="accent-text">PROIECTUL</span> CARE TE DEFINEȘTE
+                    </h1>
+                </div>
 
                 <div class="search-box-wild">
                     <form class="search-form" autocomplete="off">
@@ -37,7 +38,6 @@
                             <label>DOMENIU ACTIVITATE</label>
                             <input type="text" id="input-domeniu" placeholder="Ex: Inginerie, Management..." class="industrial-input">
                             
-                            <!-- LISTĂ SUGESTII ASIMETRICĂ -->
                             <div id="suggestions-domeniu" class="suggestions-list"></div>
                         </div>
                         
@@ -47,7 +47,6 @@
                             <label>LOCALITATE</label>
                             <input type="text" id="input-localitate" placeholder="Oraș sau Județ" class="industrial-input">
 
-                            <!-- LISTĂ SUGESTII ASIMETRICĂ -->
                             <div id="suggestions-localitate" class="suggestions-list"></div>
                         </div>
 
@@ -68,42 +67,45 @@
 
 
         <section class="domains-section">
-<div class="domains-header-container">
-        <h2 class="minimal-hero-title">EXPLOREAZĂ <span class="accent-text">DOMENIILE</span></h2>
-        <div class="header-line"></div> </div>
+            <div class="domains-header-container">
+                <h2 class="minimal-hero-title">EXPLOREAZĂ <span class="accent-text">DOMENIILE</span></h2>
+                <div class="header-line"></div> 
+            </div>
 
-    <div class="domains-grid" id="domains-container">
-        <div class="domain-card">
-            <div class="domain-shape">
-                <img src="https://images.unsplash.com/photo-1504307651254-35680f3366d4?q=80&w=500" alt="Constructii">
-                <div class="domain-overlay"></div>
-                <h3 class="domain-title">MESERII <span class="accent-text">TEHNICE</span></h3>
-            </div>
-            <div class="domain-footer">
-                <span>124 Joburi active</span>
-                <div class="arrow-icon">→</div>
-            </div>
-        </div>
+            <div class="domains-grid" id="domains-container">
+                <div class="domain-card">
+                    <div class="domain-shape">
+                        <img src="https://images.unsplash.com/photo-1504307651254-35680f3366d4?q=80&w=500" alt="Constructii">
+                        <div class="domain-overlay"></div>
+                        <h3 class="domain-title">MESERII <span class="accent-text">TEHNICE</span></h3>
+                    </div>
+                    <div class="domain-footer">
+                        <span>124 Joburi active</span>
+                        <div class="arrow-icon">→</div>
+                    </div>
+                </div>
 
-        <div class="domain-card">
-            <div class="domain-shape">
-                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=500" alt="IT">
-                <div class="domain-overlay"></div>
-                <h3 class="domain-title">TECH & <span class="accent-text">SOFTWARE</span></h3>
+                <div class="domain-card">
+                    <div class="domain-shape">
+                        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=500" alt="IT">
+                        <div class="domain-overlay"></div>
+                        <h3 class="domain-title">TECH & <span class="accent-text">SOFTWARE</span></h3>
+                    </div>
+                    <div class="domain-footer">
+                        <span>89 Joburi active</span>
+                        <div class="arrow-icon">→</div>
+                    </div>
+                </div>
             </div>
-            <div class="domain-footer">
-                <span>89 Joburi active</span>
-                <div class="arrow-icon">→</div>
-            </div>
-        </div>
-        
-        </div>
-</section>
+        </section>
     </main>
 
     <div id="footer-placeholder"></div>
 
+    <script src="script.js"></script>
+    
     <script src="componente.js"></script>
+    
     <script src="hero-search.js"></script>
     <script src="domenii.js"></script>
     
