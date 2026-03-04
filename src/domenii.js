@@ -30,17 +30,21 @@ document.addEventListener("DOMContentLoaded", async () => {
             const card = document.createElement("div");
             card.classList.add("domain-card");
 
-            card.innerHTML = `
-                <div class="domain-shape">
-                    <img src="${cat.img}" alt="${cat.sub}">
-                    <div class="domain-overlay"></div>
-                    <h3 class="domain-title">${cat.sub}</h3>
-                </div>
-                <div class="domain-footer">
-                    <span>${cat.count} Joburi active</span>
-                    <div class="arrow-icon">→</div>
-                </div>
-            `;
+card.innerHTML = `
+    <div class="dial-outer">
+        <div class="dial-ticks"></div>
+        <div class="dial-core">
+            <img src="${cat.img}" alt="${cat.sub}" class="dial-img">
+            <div class="dial-overlay"></div>
+            <div class="dial-content">
+                <h3 class="dial-title">${cat.sub}</h3>
+            </div>
+        </div>
+        <div class="dial-stats">
+            <span class="dial-number">${cat.count} POSIBILITĂȚI</span>
+        </div>
+    </div>
+`;
 
             // Opțional: Adăugăm un eveniment de click pentru filtrare viitoare
             card.addEventListener('click', () => {

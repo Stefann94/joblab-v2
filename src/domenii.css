@@ -1,7 +1,9 @@
-/* SECTION: DOMAINS REFINED */
+/* ==========================================================================
+   SECTION: DOMAINS LAYOUT
+   ========================================================================== */
 .domains-section {
     padding: 0 4% 10rem 4%;
-    max-width: 1400px;
+    max-width: 87.5rem; /* 1400px */
     margin: -6rem auto 0 auto;
     position: relative;
     z-index: 10;
@@ -12,118 +14,189 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 3rem;
+    margin-bottom: 5rem;
 }
 
 .domains-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2.5rem;
-    perspective: 1200px;
+    /* Grid compact pentru cadrane */
+    grid-template-columns: repeat(auto-fill, minmax(13.75rem, 1fr)); /* 220px */
+    gap: 3.5rem;
+    perspective: 62.5rem; /* 1000px */
 }
 
-/* REFINED CARD */
+/* ==========================================================================
+   CARD: CIRCULAR DIAL STRUCTURE
+   ========================================================================== */
 .domain-card {
     position: relative;
+    width: 13.75rem; /* 220px */
+    margin: 0 auto;
+    cursor: pointer;
     background: transparent;
-    /* Spring animation: mai rapidă și elastică */
-    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: transform 0.4s cubic-bezier(0.2, 1, 0.3, 1);
 }
 
-.domain-shape {
+.dial-outer {
     position: relative;
-    width: 100%;
-    height: 360px;
-    background: #111;
-    clip-path: polygon(0 6%, 94% 0, 100% 94%, 6% 100%);
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: clip-path 0.3s ease, border-color 0.3s ease;
+    width: 13.75rem; /* 220px */
+    height: 13.75rem; /* 220px */
+    border-radius: 50%;
+    border: 0.0625rem solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0f172a;
+    transition: all 0.4s ease;
 }
 
-/* Imaginea - contrast mărit */
-.domain-shape img {
+/* Gradațiile exterioare subțiri */
+.dial-ticks {
+    position: absolute;
+    inset: -0.3125rem; /* -5px */
+    border-radius: 50%;
+    border: 0.0625rem dashed rgba(255, 255, 255, 0.1);
+    transition: transform 1s linear, border-color 0.3s ease;
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   CARD: CORE VISUALS
+   ========================================================================== */
+.dial-core {
+    position: relative;
+    width: 85%;
+    height: 85%;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #111;
+    z-index: 2;
+    border: 0.0625rem solid rgba(255, 255, 255, 0.05);
+}
+
+.dial-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: grayscale(100%) brightness(0.5); /* Mai întunecată la bază */
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    transform: scale(1.1);
+    filter: brightness(0.7) contrast(1.1);
+    transition: all 0.6s cubic-bezier(0.2, 1, 0.3, 1);
 }
 
-/* OVERLAY REEVALUAT PENTRU CONTRAST */
-.domain-overlay {
+.dial-overlay {
     position: absolute;
     inset: 0;
-    /* Gradient mai agresiv la bază pentru a scoate textul în evidență */
-    background: linear-gradient(to top, 
-        rgba(0,0,0,0.9) 0%, 
-        rgba(0,0,0,0.4) 40%, 
-        transparent 100%);
+    background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.7) 100%);
     z-index: 1;
 }
 
-/* TEXT CONTRAST MAXIM */
-.domain-title {
+/* ==========================================================================
+   CARD: CONTENT (TITLU CENTRAT & NUMĂR JOS)
+   ========================================================================== */
+.dial-content {
     position: absolute;
-    bottom: 35px;
-    left: 20px;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     z-index: 4;
+    padding: 1.25rem; /* 20px */
+}
+
+.dial-title {
     font-family: 'Archivo', sans-serif;
-    font-size: 1.8rem;
-    letter-spacing: -1px;
-    font-weight: 900;
-    color: #FFFFFF;
-    text-transform: uppercase;
-    pointer-events: none;
-    line-height: 0.9;
-    /* Am intensificat umbra pentru contrast maxim pe zonele deschise ale pozelor */
-    filter: drop-shadow(2px 2px 15px rgba(0,0,0,0.9)); 
-}
-
-.domain-title .accent-text {
-    display: block;
     font-size: 0.9rem;
-    letter-spacing: 3px;
-    margin-top: 5px;
-    color: var(--accent); /* Portocaliul tău neon */
-    font-weight: 700;
-}
-
-/* FOOTER ASIMETRIC */
-.domain-footer {
-    position: absolute;
-    bottom: -10px;
-    right: 5px;
-    background: var(--accent);
-    color: #000; /* Text negru pe portocaliu pentru contrast industrial */
-    padding: 6px 15px;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.0625rem; /* 1px */
+    color: #FFFFFF;
     font-weight: 900;
-    clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%);
+    line-height: 1.1;
+    text-shadow: 0 0.125rem 0.625rem rgba(0,0,0,0.5);
+}
+
+/* NUMĂRUL POZIȚIONAT JOS (Industrial Badge) */
+.dial-stats {
+    position: absolute;
+    bottom: -0.9375rem; /* -15px */
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: #000;
+    padding: 0.25rem 0.75rem; /* 4px 12px */
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
     z-index: 5;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+    transition: all 0.3s ease;
 }
 
-/* HOVER EFFECTS - RAPIDE ȘI VIZIBILE */
+.dial-number {
+    letter-spacing: -0.0313rem; /* -0.5px */
+}
+
+/* ==========================================================================
+   HOVER EFFECTS (SOFT DARK MODE GLOW)
+   ========================================================================= */
 .domain-card:hover {
-    transform: translateY(-8px) rotateX(2deg);
+    transform: translateY(-0.75rem); /* Păstrăm ridicarea */
 }
 
-.domain-card:hover .domain-shape {
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); /* Revine la formă dreaptă */
-    border-color: var(--accent);
+.domain-card:hover .dial-outer {
+    border-color: rgba(255, 255, 255, 0.2); /* Bordură mai discretă la hover */
+    
+    /* Umbre modificate pentru a fi mult mai finuțe */
+    box-shadow: 
+        /* 1. Umbra de adâncime: mult mai transparentă (0.3 în loc de 0.8) și blur mai mic */
+        0 1rem 2rem rgba(0, 0, 0, 0.3), 
+        /* 2. Haloul de lumină: mult mai discret (0.06 în loc de 0.18) și blur mai mic */
+        0 0 1.5rem rgba(255, 255, 255, 0.06);
 }
 
-.domain-card:hover img {
-    filter: grayscale(0%) brightness(0.8) contrast(1.2);
-    transform: scale(1);
+.domain-card:hover .dial-img {
+    filter: brightness(1) contrast(1.1) grayscale(0%);
+    transform: scale(1.12);
 }
 
-.domain-card:hover .domain-footer {
-    background: #fff;
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(255, 62, 0, 0.4);
+.domain-card:hover .dial-title {
+    transform: scale(1.05);
+    /* Umbra textului puțin mai fină și ea */
+    text-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.7); 
 }
 
+.domain-card:hover .dial-stats {
+    background: #ffffff;
+    color: #000;
+    transform: translateX(-50%) translateY(-0.3125rem);
+    /* Umbra insignei mai discretă */
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
+}
+
+/* Variantă pentru ecrane OLED - adaptată să fie și ea finuță */
+@media (prefers-color-scheme: dark) {
+    .domain-card:hover .dial-outer {
+        box-shadow: 
+            /* Adâncime OLED fină */
+            0 1.25rem 2.5rem rgba(0, 0, 0, 0.4), 
+            /* Halo OLED fin */
+            0 0 2rem rgba(255, 255, 255, 0.08);
+    }
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+@media (max-width: 37.5rem) { /* 600px */
+    .domains-grid {
+        grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); /* 160px */
+        gap: 2.5rem;
+    }
+    .domain-card, .dial-outer {
+        width: 10rem; /* 160px */
+        height: 10rem; /* 160px */
+    }
+    .dial-title {
+        font-size: 0.7rem;
+    }
+}
