@@ -78,15 +78,18 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: brightness(0.7) contrast(1.1);
+    /* POZA NATURALA SI COLORATA */
+    filter: brightness(1) contrast(1) saturate(1);
     transition: all 0.6s cubic-bezier(0.2, 1, 0.3, 1);
 }
 
 .dial-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.7) 100%);
+    /* Gradient discret pentru lizibilitate, fara sa stinga culorile */
+    background: radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.5) 100%);
     z-index: 1;
+    transition: background 0.3s ease;
 }
 
 /* ==========================================================================
@@ -111,7 +114,8 @@
     color: #FFFFFF;
     font-weight: 900;
     line-height: 1.1;
-    text-shadow: 0 0.125rem 0.625rem rgba(0,0,0,0.5);
+    /* Umbra intarita pentru contrast pe poze colorate */
+    text-shadow: 0 0.125rem 0.625rem rgba(0,0,0,0.8);
 }
 
 /* NUMĂRUL POZIȚIONAT JOS (Industrial Badge) */
@@ -144,42 +148,35 @@
 }
 
 .domain-card:hover .dial-outer {
-    border-color: rgba(255, 255, 255, 0.2); /* Bordură mai discretă la hover */
-    
-    /* Umbre modificate pentru a fi mult mai finuțe */
+    border-color: rgba(255, 255, 255, 0.2);
     box-shadow: 
-        /* 1. Umbra de adâncime: mult mai transparentă (0.3 în loc de 0.8) și blur mai mic */
         0 1rem 2rem rgba(0, 0, 0, 0.3), 
-        /* 2. Haloul de lumină: mult mai discret (0.06 în loc de 0.18) și blur mai mic */
         0 0 1.5rem rgba(255, 255, 255, 0.06);
 }
 
 .domain-card:hover .dial-img {
-    filter: brightness(1) contrast(1.1) grayscale(0%);
+    /* EXTRA COLORAT LA HOVER */
+    filter: brightness(1.1) contrast(1.1) saturate(1.4);
     transform: scale(1.12);
 }
 
 .domain-card:hover .dial-title {
     transform: scale(1.05);
-    /* Umbra textului puțin mai fină și ea */
-    text-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.7); 
+    text-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.9); 
 }
 
 .domain-card:hover .dial-stats {
     background: #ffffff;
     color: #000;
     transform: translateX(-50%) translateY(-0.3125rem);
-    /* Umbra insignei mai discretă */
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
 }
 
-/* Variantă pentru ecrane OLED - adaptată să fie și ea finuță */
+/* Variantă pentru ecrane OLED */
 @media (prefers-color-scheme: dark) {
     .domain-card:hover .dial-outer {
         box-shadow: 
-            /* Adâncime OLED fină */
             0 1.25rem 2.5rem rgba(0, 0, 0, 0.4), 
-            /* Halo OLED fin */
             0 0 2rem rgba(255, 255, 255, 0.08);
     }
 }
