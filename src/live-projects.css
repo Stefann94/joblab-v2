@@ -1,0 +1,128 @@
+/* ==========================================================================
+   LIVE JOBS TICKER STYLES
+   ========================================================================== */
+.live-jobs-ticker {
+    width: 100%;
+    background: var(--nav-bg);
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    border-top: 1px solid var(--accent);
+    border-bottom: 2px solid var(--accent);
+    overflow: hidden;
+    position: relative;
+    z-index: 20;
+    margin-top: -2rem; /* Se suprapune ușor pe design-ul asimetric */
+}
+
+/* Eticheta fixa din stânga */
+.ticker-label {
+    background: var(--accent);
+    color: #000;
+    font-family: 'Space Mono', monospace;
+    font-weight: 900;
+    font-size: 0.75rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 1.5rem;
+    z-index: 25;
+    clip-path: polygon(0 0, 90% 0, 100% 100%, 0 100%);
+    white-space: nowrap;
+}
+
+.pulse-icon {
+    width: 8px;
+    height: 8px;
+    background: #00FF41; /* Verde digital */
+    border-radius: 50%;
+    margin-right: 10px;
+    box-shadow: 0 0 10px #00FF41;
+    animation: blink 1s infinite alternate;
+}
+
+/* Container-ul animației */
+.ticker-wrap {
+    flex: 1;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.ticker-move {
+    display: flex;
+    white-space: nowrap;
+    animation: tickerLoop 30s linear infinite;
+}
+
+/* Elementele individuale din ticker */
+.ticker-item {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8);
+    padding: 0 3rem;
+    border-right: 1px solid rgba(255, 62, 0, 0.3);
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.ticker-item:hover {
+    color: var(--accent);
+}
+
+/* PAUZA LA HOVER */
+.live-jobs-ticker:hover .ticker-move {
+    animation-play-state: paused;
+}
+
+/* ANIMATIONS */
+@keyframes tickerLoop {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+@keyframes blink {
+    from { opacity: 0.4; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1.1); }
+}
+
+/* Ajustare pentru dark mode */
+body.dark-mode .live-jobs-ticker {
+    background: #000;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ticker-item {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    padding: 0 2.5rem;
+    border-right: 1px solid rgba(255, 62, 0, 0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.job-code {
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.job-name {
+    font-weight: 900;
+    color: #FFFFFF;
+}
+
+.job-salary {
+    color: #00FF41; /* Verde tip terminal pentru bani */
+    background: rgba(0, 255, 65, 0.1);
+    padding: 2px 6px;
+    border-radius: 2px;
+}
+
+/* Efect de "Active Profile" la hover */
+.ticker-item:hover {
+    background: rgba(255, 62, 0, 0.15);
+    color: #FFFFFF;
+    transform: scale(1.05);
+}
